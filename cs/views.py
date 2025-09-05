@@ -7,8 +7,19 @@ from .forms import CaseForm
 
 @login_required
 def case_list(request):
-    cases = Case.objects.all()
-    return render(request, 'cs/case_list.html', {'cases': cases})
+    qs = Case.objects.all()
+    q = request.GET.get('q', '')
+    status = request.GET.get('status', '')
+    priority = request.GET.get('priority', '')
+    if q:
+        qs = qs.filter(title__icontains=q) | qs.filter(description__icontains=q)
+    if status:
+        qs = qs.filter(status=status)
+    if priority:
+        qs = qs.filter(priority=priority)
+    return render(request, 'cs/case_list.html', {
+        'cases': qs, 'q': q, 'status': status, 'priority': priority
+    })
 
 @login_required
 def case_detail(request, pk):
