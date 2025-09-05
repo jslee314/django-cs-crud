@@ -1,0 +1,27 @@
+<!-- cs/templates/cs/case_list.html -->
+{% extends "cs/base.html" %}
+{% block title %}CS 목록{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="m-0">CS 케이스 목록</h3>
+  <a class="btn btn-primary" href="{% url 'case_create' %}">+ 새 케이스</a>
+</div>
+
+<div class="list-group">
+  {% for c in cases %}
+    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+       href="{% url 'case_detail' c.pk %}">
+      <div>
+        <strong>[{{ c.get_status_display }}]</strong> {{ c.title }}
+        {% if c.device_name %}<small class="text-muted ms-2">장비: {{ c.device_name }}</small>{% endif %}
+        {% if c.assignee %}<small class="text-muted ms-2">담당: {{ c.assignee }}</small>{% endif %}
+        {% if c.customer_name %}<small class="text-muted ms-2">고객: {{ c.customer_name }}</small>{% endif %}
+        <small class="text-muted ms-2">우선순위: {{ c.get_priority_display }}</small>
+      </div>
+      <small class="text-muted">{{ c.created_at|date:"Y-m-d H:i" }}</small>
+    </a>
+  {% empty %}
+    <div class="alert alert-secondary">아직 등록된 케이스가 없습니다.</div>
+  {% endfor %}
+</div>
+{% endblock %}

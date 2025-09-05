@@ -1,0 +1,14 @@
+<!-- cs/templates/cs/case_confirm_delete.html -->
+{% extends "cs/base.html" %}
+{% block title %}삭제{% endblock %}
+{% block content %}
+<h3 class="mb-3">삭제 확인</h3>
+<div class="alert alert-danger">
+  정말로 "<strong>{{ case.title }}</strong>" 케이스를 삭제하시겠습니까?
+</div>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger" type="submit">네, 삭제합니다</button>
+  <a class="btn btn-secondary" href="{% url 'case_detail' case.pk %}">아니오</a>
+</form>
+{% endblock %}

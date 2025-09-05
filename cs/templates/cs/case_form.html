@@ -1,0 +1,15 @@
+<!-- cs/templates/cs/case_form.html -->
+{% extends "cs/base.html" %}
+{% block title %}{% if mode == 'create' %}생성{% else %}수정{% endif %}{% endblock %}
+{% block content %}
+<h3 class="mb-3">{% if mode == 'create' %}새 케이스{% else %}케이스 수정{% endif %}</h3>
+
+<form method="post" class="card card-body">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">저장</button>
+    <a class="btn btn-secondary" href="{% url 'case_list' %}">취소</a>
+  </div>
+</form>
+{% endblock %}

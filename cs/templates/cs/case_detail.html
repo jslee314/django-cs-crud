@@ -1,0 +1,33 @@
+<!-- cs/templates/cs/case_detail.html -->
+{% extends "cs/base.html" %}
+{% block title %}CS 상세{% endblock %}
+{% block content %}
+<h3 class="mb-3">CS 케이스 상세</h3>
+
+<div class="card">
+  <div class="card-body">
+    <p class="mb-1"><strong>제목:</strong> {{ case.title }}</p>
+    <p class="mb-1"><strong>상태:</strong> {{ case.get_status_display }}</p>
+    <p class="mb-1"><strong>우선순위:</strong> {{ case.get_priority_display }}</p>
+    {% if case.device_name %}<p class="mb-1"><strong>장비명:</strong> {{ case.device_name }}</p>{% endif %}
+    {% if case.assignee %}<p class="mb-1"><strong>CS담당자:</strong> {{ case.assignee }}</p>{% endif %}
+    {% if case.customer_name %}<p class="mb-1"><strong>고객명:</strong> {{ case.customer_name }}</p>{% endif %}
+    {% if case.description %}
+      <hr>
+      <p class="mb-0" style="white-space:pre-wrap;">{{ case.description }}</p>
+    {% endif %}
+    <p class="text-muted mt-3 mb-0"><small>
+      등록 {{ case.created_at|date:"Y-m-d H:i" }} · 수정 {{ case.updated_at|date:"Y-m-d H:i" }}
+    </small></p>
+  </div>
+</div>
+
+<div class="mt-3 d-flex gap-2">
+  <a class="btn btn-outline-primary" href="{% url 'case_update' case.pk %}">수정</a>
+  <a class="btn btn-outline-secondary" href="{% url 'case_list' %}">목록</a>
+  <form method="post" action="{% url 'case_delete' case.pk %}" style="display:inline;">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">삭제</button>
+  </form>
+</div>
+{% endblock %}
