@@ -6,6 +6,8 @@ from django.core.paginator import Paginator
 from .models import Case
 from .forms import CaseForm
 
+from django.contrib import messages
+
 @login_required
 def case_list(request):
 
@@ -41,6 +43,7 @@ def case_create(request):
         form = CaseForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, "케이스가 등록되었습니다.")
             return redirect('case_list')  # PRG 패턴
     else:
         form = CaseForm()
@@ -63,6 +66,7 @@ def case_delete(request, pk):
     case = get_object_or_404(Case, pk=pk)
     if request.method == 'POST':
         case.delete()
+        messages.warning(request, "케이스가 삭제되었습니다.")
         return redirect('case_list')
     return render(request, 'cs/case_confirm_delete.html', {'case': case})
 
