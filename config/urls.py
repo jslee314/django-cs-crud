@@ -19,4 +19,6 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('cs/', include('cs.urls')),  # /cs/ 로 접근
+
 ]
