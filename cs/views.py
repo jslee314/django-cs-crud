@@ -1,12 +1,15 @@
 # cs/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from .models import Case
 from .forms import CaseForm
 
 @login_required
 def case_list(request):
+
+    # 검색/필터
     qs = Case.objects.all()
     q = request.GET.get('q', '')
     status = request.GET.get('status', '')
@@ -17,8 +20,14 @@ def case_list(request):
         qs = qs.filter(status=status)
     if priority:
         qs = qs.filter(priority=priority)
+
+    # 페이지 나누기
+    paginator = Paginator(qs, 10)
+    page = request.GET.get('page')
+    cases = paginator.get_page(page)
     return render(request, 'cs/case_list.html', {
-        'cases': qs, 'q': q, 'status': status, 'priority': priority
+        'cases': cases,
+        'q': q, 'status': status, 'priority': priority,
     })
 
 @login_required
