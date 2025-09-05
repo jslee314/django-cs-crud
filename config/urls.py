@@ -19,6 +19,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),  # 로그인/로그아웃
     path('cs/', include('cs.urls')),  # /cs/ 로 접근
 
 ]
