@@ -1,0 +1,43 @@
+﻿{% extends "cs/base.html" %}
+{% block title %}분석 결과{% endblock %}
+{% block content %}
+<h3 class="mb-3">분석 결과</h3>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex gap-3 align-items-center">
+      <span class="badge {% if run.ok %}bg-success{% else %}bg-danger{% endif %}">
+        {% if run.ok %}OK{% else %}ISSUE{% endif %}
+      </span>
+      <div><strong>{{ run.upload.original_name }}</strong></div>
+    </div>
+    <div class="mt-2 text-muted">
+      업로드: {{ run.upload.created_at|date:"Y-m-d H:i" }} /
+      분석: {{ run.started_at|date:"Y-m-d H:i" }} → {{ run.finished_at|date:"Y-m-d H:i" }}
+    </div>
+    <pre class="mt-3 bg-light p-2">{{ run.summary|json_script:"sum" }}</pre>
+  </div>
+</div>
+
+<h5>이벤트 ({{ events|length }}건)</h5>
+<div class="list-group">
+  {% for e in events %}
+    <div class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{{ e.kind }}</strong>
+        <small class="text-muted ms-2">idx: {{ e.index }}</small>
+        <div class="text-muted">{{ e.message }}</div>
+      </div>
+      <span class="badge {% if e.severity == 'high' %}bg-danger{% elif e.severity == 'med' %}bg-warning{% else %}bg-secondary{% endif %}">
+        {{ e.severity }}
+      </span>
+    </div>
+  {% empty %}
+    <div class="alert alert-success">이상이 감지되지 않았습니다.</div>
+  {% endfor %}
+</div>
+
+<div class="mt-3">
+  <a class="btn btn-outline-secondary" href="{% url 'od_upload_list' %}">업로드 목록</a>
+</div>
+{% endblock %}
